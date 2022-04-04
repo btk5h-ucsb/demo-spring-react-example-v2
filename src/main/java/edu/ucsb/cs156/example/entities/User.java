@@ -20,13 +20,8 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String email;
-  private String googleSub;
-  private String pictureUrl;
-  private String fullName;
-  private String givenName;
-  private String familyName;
-  private boolean emailVerified;
-  private String locale;
-  private String hostedDomain;
+  private String name;
+  private String githubUsername;
+  private String avatarUrl;
   private boolean admin;
 }

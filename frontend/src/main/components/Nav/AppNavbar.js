@@ -102,7 +102,7 @@ export default function AppNavbar({ currentUser, systemInfo, doLogout, currentUr
                     <Button onClick={doLogout}>Log Out</Button>
                   </>
                 ) : (
-                  <Button href="/oauth2/authorization/google">Log In</Button>
+                  <Button href="/oauth2/authorization/github">Log In</Button>
                 )
               }
             </Nav>

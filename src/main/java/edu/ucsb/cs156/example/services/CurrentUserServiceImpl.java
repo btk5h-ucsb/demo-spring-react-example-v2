@@ -5,10 +5,7 @@ import edu.ucsb.cs156.example.models.CurrentUser;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,25 +35,17 @@ public class CurrentUserServiceImpl extends CurrentUserService {
       .user(this.getUser())
       .roles(this.getRoles())
       .build();
-    log.info("getCurrentUser returns {}",cu);
+    log.info("getCurrentUser returns {}", cu);
     return cu;
   }
 
-  
+
   public User getOAuth2AuthenticatedUser(SecurityContext securityContext, Authentication authentication) {
     OAuth2User oAuthUser = ((OAuth2AuthenticationToken) authentication).getPrincipal();
     String email = oAuthUser.getAttribute("email");
-    String googleSub = oAuthUser.getAttribute("sub");
-    String pictureUrl = oAuthUser.getAttribute("picture");
-    String fullName = oAuthUser.getAttribute("name");
-    String givenName = oAuthUser.getAttribute("given_name");
-    String familyName = oAuthUser.getAttribute("family_name");
-    boolean emailVerified = oAuthUser.getAttribute("email_verified");
-    String locale = oAuthUser.getAttribute("locale");
-    String hostedDomain = oAuthUser.getAttribute("hd");
 
-    java.util.Map<java.lang.String,java.lang.Object> attrs = oAuthUser.getAttributes();
-    log.info("attrs={}",attrs);
+    Map<String, Object> attrs = oAuthUser.getAttributes();
+    log.info("attrs={}", attrs);
 
     Optional<User> ou = userRepository.findByEmail(email);
     if (ou.isPresent()) {
@@ -69,17 +58,12 @@ public class CurrentUserServiceImpl extends CurrentUserService {
     }
 
     User u = User.builder()
-        .googleSub(googleSub)
-        .email(email)
-        .pictureUrl(pictureUrl)
-        .fullName(fullName)
-        .givenName(givenName)
-        .familyName(familyName)
-        .emailVerified(emailVerified)
-        .locale(locale)
-        .hostedDomain(hostedDomain)
-        .admin(adminEmails.contains(email))
-        .build();
+      .email(email)
+      .name(oAuthUser.getAttribute("name"))
+      .githubUsername(oAuthUser.getAttribute("login"))
+      .avatarUrl(oAuthUser.getAttribute("avatar_url"))
+      .admin(adminEmails.contains(email))
+      .build();
     userRepository.save(u);
     return u;
   }
@@ -95,6 +79,6 @@ public class CurrentUserServiceImpl extends CurrentUserService {
   }
 
   public Collection<? extends GrantedAuthority> getRoles() {
-   return grantedAuthoritiesService.getGrantedAuthorities();
+    return grantedAuthoritiesService.getGrantedAuthorities();
   }
 }

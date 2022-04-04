@@ -58,19 +58,9 @@ public class MockCurrentUserServiceImpl extends CurrentUserServiceImpl {
     }
 
     User u = User.builder()
-    .googleSub(googleSub)
-    .email(email)
-    .pictureUrl(pictureUrl)
-    .fullName(fullName)
-    .givenName(givenName)
-    .familyName(familyName)
-    .emailVerified(emailVerified)
-    .locale(locale)
-    .hostedDomain(hostedDomain)
-    .admin(admin)
-    .id(1L)
-    .build();
-    
+        .build();
+
+
     log.info("************** ALERT **********************");
     log.info("************* MOCK USER********************");
     log.info("authentication={}",authentication);
